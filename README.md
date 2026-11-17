@@ -3,7 +3,7 @@
 
 An interactive educational web app for exploring basic DC circuit analysis. Adjust the circuit values and observe how the load voltage, current, equivalent circuit, and power transfer change.
 
-**Live app:** [Open DC Circuit Theorem Explorer](https://YOUR-USERNAME.github.io/YOUR-REPOSITORY/)
+**Live app:** [Open DC Circuit Theorem Explorer]([https://YOUR-USERNAME.github.io/YOUR-REPOSITORY/](https://jmaxhub333.github.io/CTS-MP/))
 
 ## Project overview
 
