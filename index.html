@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f2ed">
+  <title>DC Circuit Theorem Explorer</title>
+  <style>
+    :root{color-scheme:light;--bg:#f4f2ed;--panel:#fffefa;--panel2:#f7f5ef;--line:#dedbd2;--muted:#74766e;--text:#292c27;--olive:#667653;--olive-dark:#526342;--sage:#e9eee3;--rust:#ad6844;--rust-light:#f4e8df;--danger:#a34f43;--shadow:#28251d0d}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 "Segoe UI",system-ui,-apple-system,sans-serif}
+    .wrap{max-width:1220px;margin:0 auto;padding:34px 24px 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:26px}.brand{display:flex;align-items:center;gap:12px}.mark{width:42px;height:42px;border:1px solid #cbd2c2;background:#e8ece3;border-radius:8px;display:grid;place-items:center;color:var(--olive-dark);font-size:13px;font-weight:700;letter-spacing:.03em}.eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--olive-dark);font-weight:700}.top h1{font-size:clamp(22px,3vw,32px);line-height:1.15;margin:2px 0 0;letter-spacing:-.025em}.badge{border:1px solid var(--line);border-radius:6px;background:#fbfaf6;padding:7px 11px;color:#66685f;font-size:11px;white-space:nowrap}
+    .intro{margin:0 0 22px;color:var(--muted);max-width:720px}.layout{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}.panel{background:var(--panel);border:1px solid var(--line);border-radius:11px;box-shadow:0 3px 12px var(--shadow)}.controls{padding:20px;position:sticky;top:16px}.panel h2{margin:0;font-size:16px;letter-spacing:-.01em}.sub{font-size:12px;color:var(--muted);margin:4px 0 18px}.field{margin:15px 0}.field label{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#383b35;margin-bottom:7px}.field small{color:var(--muted);font-size:11px}.inputrow{display:flex;align-items:center;background:#fff;border:1px solid #d8d6ce;border-radius:6px;overflow:hidden}.inputrow:focus-within{border-color:var(--olive);box-shadow:0 0 0 2px #66765320}.inputrow input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--text);padding:10px 11px;font:inherit;font-variant-numeric:tabular-nums}.unit{padding:0 11px;color:#777970;border-left:1px solid #e3e0d8;font-size:12px}.hint{color:#85867e;font-size:11px;margin:5px 1px 0}.buttons{display:flex;gap:9px;margin-top:19px}.button{border:1px solid var(--olive-dark);background:var(--olive-dark);color:#fff;padding:9px 12px;border-radius:6px;cursor:pointer;font:600 12px system-ui,sans-serif;flex:1;transition:background .15s,border-color .15s}.button:hover{background:#455638;border-color:#455638}.button.secondary{background:transparent;color:#4e5746;border-color:#c9cec0}.button.secondary:hover{background:var(--sage)}.error{display:none;color:var(--danger);background:#f7ebe6;border:1px solid #e6c9bc;padding:9px 11px;border-radius:6px;font-size:12px;margin-top:13px}
+    .main{display:grid;gap:18px}.hero{padding:19px 21px 16px}.herohead{display:flex;justify-content:space-between;gap:12px;align-items:start}.herohead p{margin:4px 0 0;color:var(--muted);font-size:12px}.live{color:#66685f;display:flex;align-items:center;gap:7px;font-size:11px;font-weight:500}.live:before{content:"";width:7px;height:7px;background:var(--olive);border-radius:50%}
+    .circuit{margin-top:12px;width:100%;height:auto;min-height:220px;display:block}.wire{fill:none;stroke:#73766d;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.node{fill:var(--rust);stroke:var(--panel);stroke-width:2}.resistor{fill:#f3f0e8;stroke:var(--olive);stroke-width:2}.battery{fill:var(--panel);stroke:var(--rust);stroke-width:2.4;stroke-linecap:round}.ground{stroke:#85877f;stroke-width:2}.svglabel{fill:#383b35;font:13px "Segoe UI",system-ui}.svgsmall{fill:#777970;font:11px "Segoe UI",system-ui}.svgvalue{fill:var(--olive-dark);font:12px "Segoe UI",system-ui;font-weight:700}.current{fill:var(--rust);font:11px "Segoe UI",system-ui;font-weight:600}.loadhighlight{stroke:var(--rust)}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.metric{padding:14px 15px;border-radius:8px;background:#faf9f5;border:1px solid var(--line);min-width:0}.metric .label{font-size:11px;color:var(--muted);margin-bottom:7px}.metric .value{font-size:clamp(17px,2vw,23px);font-weight:700;letter-spacing:-.025em;font-variant-numeric:tabular-nums;white-space:nowrap}.metric .unit2{font-size:11px;font-weight:500;color:#777970;letter-spacing:0}.metric.accent{border-color:#cbd2c2;background:var(--sage)}.metric.accent .value{color:var(--olive-dark)}
+    .twocol{display:grid;grid-template-columns:1fr 1fr;gap:18px}.section{padding:19px 20px}.sectionhead{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:14px}.sectionhead p{margin:4px 0 0;color:var(--muted);font-size:12px}.pill{font-size:9px;color:#686a61;border:1px solid var(--line);border-radius:5px;padding:4px 7px;white-space:nowrap}.equivalent{display:grid;grid-template-columns:1fr 1fr;gap:9px}.eqbox{background:#faf9f5;border:1px solid #e4e1d8;border-radius:7px;padding:12px}.eqbox .k{font-size:11px;color:var(--muted)}.eqbox .v{margin-top:4px;font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}.eqbox .v span{font-size:11px;font-weight:500;color:#777970}.formula{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#4c5048;font-size:11px;margin-top:12px;padding:9px 10px;background:#f3f1eb;border-radius:5px;overflow-wrap:anywhere}.verify{display:flex;align-items:center;gap:8px;margin-top:11px;padding:8px 10px;border-radius:5px;background:#edf1e8;color:#4d6241;font-size:11px}.check{font-size:14px}.equations{display:grid;gap:9px}.eqline{padding:11px 12px;background:#faf9f5;border:1px solid #e4e1d8;border-radius:7px}.eqline .tag{display:block;color:var(--olive-dark);font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:4px}.eqline code{white-space:normal;color:#3f423d;font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}.eqnote{color:#777970;font-size:11px;margin:10px 2px 0}
+    .chartpanel{padding:19px 20px 15px}.chartwrap{position:relative;height:235px;margin-top:2px}.chartwrap canvas{width:100%;height:100%;display:block}.chartfoot{display:flex;justify-content:space-between;gap:15px;color:#777970;font-size:10px}.legend{display:flex;gap:15px;align-items:center}.key{display:inline-flex;align-items:center;gap:6px}.swatch{height:2px;width:14px;background:var(--olive)}.swatch.dot{height:7px;width:7px;border-radius:50%;background:var(--rust)}
+    .footer{margin-top:19px;color:#7e8078;font-size:11px;text-align:center}.footer strong{color:#55584f;font-weight:600}
+    @media(max-width:900px){.layout{grid-template-columns:280px 1fr}.metrics{grid-template-columns:repeat(2,1fr)}.twocol{grid-template-columns:1fr}}
+    @media(max-width:650px){.wrap{padding:22px 14px 38px}.top{align-items:flex-start}.badge{display:none}.layout{grid-template-columns:1fr}.controls{position:static}.metrics{grid-template-columns:repeat(2,1fr)}.hero,.section,.chartpanel{padding:16px}.circuit{min-height:185px}.chartwrap{height:200px}}
+    /* Prototype skin: graph paper, pencil-like edges and intentionally uneven notes. */
+    :root{--bg:#f6f1e6;--panel:#fffdf7;--panel2:#f4eedf;--line:#aaa38f;--text:#30362e;--muted:#74766d;--olive:#718052;--olive-dark:#52633d;--sage:#edf0df;--rust:#b46c43;--rust-light:#f4e5d8;--shadow:#5c51401c}
+    body{background-color:var(--bg);background-image:linear-gradient(#78876b12 1px,transparent 1px),linear-gradient(90deg,#78876b12 1px,transparent 1px);background-size:22px 22px}
+    .wrap{max-width:1240px}.top{margin-bottom:21px}.mark{border:2px solid #747a63;border-radius:4px 7px 5px 3px;background:#f3e9cd;box-shadow:2px 2px 0 #c8bea8;transform:rotate(-3deg);font-family:Georgia,serif;font-size:12px}
+    .eyebrow{font-family:"Segoe Print","Comic Sans MS",cursive;letter-spacing:.04em;text-transform:none;font-size:12px}.top h1{font-family:Georgia,"Times New Roman",serif;font-weight:600;letter-spacing:-.02em}.badge{border:2px dashed #a79770;border-radius:3px 8px 4px 6px;background:#f5eccf;color:#675b42;transform:rotate(1deg)}
+    .intro{font-family:"Segoe UI",system-ui,sans-serif;max-width:690px}.layout{grid-template-columns:305px 1fr;gap:23px}.panel{border:2px solid #838775;border-radius:7px 10px 5px 8px;box-shadow:3px 4px 0 #c9c0ad;position:relative}.controls{margin-top:9px;transform:rotate(-.25deg)}.hero{transform:rotate(.12deg)}.section{border-radius:5px 9px 6px 8px}.twocol{grid-template-columns:1.04fr .96fr;gap:20px}.twocol .section:nth-child(2){margin-top:9px;transform:rotate(.18deg)}
+    .panel h2{font-family:Georgia,"Times New Roman",serif;font-size:17px;font-weight:600}.sub,.herohead p,.sectionhead p{font-family:"Segoe Print","Comic Sans MS",cursive;font-size:11px}.field label{font-family:"Segoe UI",system-ui,sans-serif}.field small{font-family:"Segoe Print","Comic Sans MS",cursive;font-size:11px;color:#8a7453}.inputrow{border:2px dashed #aaa18d;border-radius:4px 7px 3px 6px;background:#fffefb}.inputrow:focus-within{border-color:var(--olive-dark);box-shadow:2px 2px 0 #d0c7b1}.unit{border-left:1px dashed #c4bca9}.hint{font-family:"Segoe Print","Comic Sans MS",cursive;color:#817861}.button{border:2px solid #536443;border-radius:4px 7px 3px 6px;box-shadow:2px 2px 0 #c5bea9}.button:hover{transform:translate(1px,1px);box-shadow:1px 1px 0 #c5bea9}.button.secondary{border:2px dashed #8f927e;background:#f8f5ea}.button.secondary:hover{background:#ecebdc}.error{border:2px dashed #b46c43;border-radius:4px;background:#fff2e8}
+    .live{font-family:"Segoe Print","Comic Sans MS",cursive;font-size:11px}.live:before{border:1px solid #4f603c;box-shadow:1px 1px 0 #c1c7ad}.circuit{background:#fffdf7;border:1px dashed #c6bda8;border-radius:3px 9px 4px 7px;padding:6px}.wire{stroke:#6d7064}.resistor{fill:#f4eedf;stroke:#65724f}.battery{stroke:#ad6844}.node{fill:#ad6844}.svglabel{fill:#373c32}.svgsmall{fill:#77766b}.svgvalue{fill:#596b43}.current{fill:#a76440}
+    .metrics{gap:11px}.metric{background:#fffdf8;border:1.5px solid #b3ad9b;border-radius:4px 8px 5px 7px;box-shadow:1px 2px 0 #ddd4c2}.metric:nth-child(2){transform:rotate(.35deg)}.metric:nth-child(3){transform:rotate(-.25deg)}.metric.accent{background:#edf0df;border-color:#858e70}.metric .label,.eqbox .k{font-family:"Segoe Print","Comic Sans MS",cursive;font-size:10px}.metric .value{font-family:Georgia,"Times New Roman",serif;letter-spacing:-.01em}.metric .unit2{font-family:"Segoe UI",system-ui,sans-serif}
+    .pill{border:1.5px dashed #a79d82;border-radius:3px 7px 4px 6px;background:#f6efd9;transform:rotate(-1deg);font-family:"Segoe Print","Comic Sans MS",cursive;text-transform:none;font-size:9px}.eqbox{background:#fdfbf4;border:1.5px dotted #a49c88;border-radius:4px 7px 5px 3px}.eqbox:nth-child(2){transform:rotate(.4deg)}.formula{background:#f3ebd5;border:1px dashed #b8a983;border-radius:3px 7px 4px 5px;color:#5b5545}.verify{background:#edf0df;border:1px dashed #9aa382;border-radius:4px;color:#52633d}.eqline{background:#fffdf8;border:1.5px dashed #b4ad9c;border-radius:4px 8px 3px 6px}.eqline:nth-child(2){transform:rotate(-.15deg)}.eqline .tag{color:#65724f;font-family:"Segoe Print","Comic Sans MS",cursive;letter-spacing:.03em;text-transform:none}.eqline code{color:#393d35}.eqnote{font-family:"Segoe Print","Comic Sans MS",cursive;color:#777263}
+    .chartpanel{transform:rotate(-.1deg)}.chartfoot{font-family:"Segoe Print","Comic Sans MS",cursive;color:#706d60}.swatch{background:var(--olive)}.swatch.dot{background:var(--rust)}.footer{font-family:"Segoe Print","Comic Sans MS",cursive;color:#777263}.footer strong{color:#4f5940}
+    @media(max-width:900px){.layout{grid-template-columns:280px 1fr}.twocol{grid-template-columns:1fr}.twocol .section:nth-child(2){margin-top:0}}
+    @media(max-width:650px){.layout{grid-template-columns:1fr}.controls,.hero,.twocol .section:nth-child(2),.chartpanel{transform:none;margin-top:0}.metric:nth-child(2),.metric:nth-child(3),.eqbox:nth-child(2),.eqline:nth-child(2){transform:none}.badge{display:none}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top"><div class="brand"><div class="mark">DC</div><div><div class="eyebrow">Interactive circuit lab</div><h1>DC Circuit Theorem Explorer</h1></div></div><div class="badge">Working prototype · DC circuit</div></header>
+    <p class="intro">Explore node and mesh analysis, verify Kirchhoff’s laws, and see how Thevenin, Norton, and maximum power transfer describe the same circuit.</p>
+    <div class="layout">
+      <aside class="panel controls">
+        <h2>Circuit inputs</h2><p class="sub">Change a value to update the analysis.</p>
+        <div class="field"><label for="vs">Source voltage <small>Vs</small></label><div class="inputrow"><input id="vs" type="number" min="0.001" step="any" value="12"><span class="unit">V</span></div></div>
+        <div class="field"><label for="r1">Series resistor <small>R1</small></label><div class="inputrow"><input id="r1" type="number" min="0.001" step="any" value="1000"><span class="unit">Ω</span></div><div class="hint">Use ohms. Example: 1 kΩ = 1000 Ω.</div></div>
+        <div class="field"><label for="r2">Divider resistor <small>R2</small></label><div class="inputrow"><input id="r2" type="number" min="0.001" step="any" value="2000"><span class="unit">Ω</span></div></div>
+        <div class="field"><label for="rl">Load resistor <small>RL</small></label><div class="inputrow"><input id="rl" type="number" min="0.001" step="any" value="1000"><span class="unit">Ω</span></div><div class="hint">Try setting RL equal to Rth for maximum power.</div></div>
+        <div class="buttons"><button class="button" id="reset">Reset example</button><button class="button secondary" id="maxload">Set RL = Rth</button></div>
+        <div class="error" id="error" role="alert"></div>
+      </aside>
+      <main class="main">
+        <section class="panel hero"><div class="herohead"><div><h2>Loaded circuit</h2><p>Voltage source feeding a divider and a variable output load.</p></div><div class="live">Updates as you type</div></div>
+          <svg class="circuit" viewBox="0 0 700 250" role="img" aria-label="Voltage source connected through R1 to output node, with R2 and load RL connected from output to ground">
+            <path class="wire" d="M95 55 H200 M278 55 H480 M95 55 V105 M95 145 V195 H480 M480 55 V94 M480 154 V195 M480 195 H575 M575 195 V207"/>
+            <rect class="resistor" x="200" y="42" width="78" height="26" rx="5"/><text class="svglabel" x="239" y="20" text-anchor="middle">R1</text><text class="svgvalue" id="svgR1" x="239" y="91" text-anchor="middle">1.00 kΩ</text>
+            <rect class="resistor" x="467" y="94" width="26" height="60" rx="5"/><text class="svglabel" x="530" y="119">R2</text><text class="svgvalue" id="svgR2" x="530" y="137">2.00 kΩ</text>
+            <path class="wire" d="M575 55 V86 M575 174 V195"/><rect class="resistor loadhighlight" x="562" y="86" width="26" height="88" rx="5"/><text class="svglabel" x="620" y="120">RL</text><text class="svgvalue" id="svgRL" x="620" y="139">1.00 kΩ</text>
+            <circle class="battery" cx="95" cy="125" r="20"/><path class="battery" d="M87 117 H103 M95 109 V125 M89 137 H101"/><text class="svglabel" x="49" y="113">Vs</text><text class="svgvalue" id="svgVs" x="42" y="133">12 V</text>
+            <circle class="node" cx="480" cy="55" r="5"/><text class="svglabel" x="464" y="35">Vout</text><text class="svgvalue" id="svgVout" x="497" y="45">4.00 V</text>
+            <path class="ground" d="M563 207 H587 M567 213 H583 M572 219 H578"/><text class="svgsmall" x="95" y="235" text-anchor="middle">0 V reference</text>
+            <text class="current" id="svgI1" x="314" y="48">I₁ 8.00 mA →</text><text class="current" id="svgI2" x="505" y="106">I₂ 4.00 mA ↓</text><text class="current" id="svgIL" x="598" y="165">IL 4.00 mA ↓</text>
+          </svg>
+          <div class="metrics">
+            <div class="metric accent"><div class="label">Load voltage</div><div class="value" id="mV">4.00 <span class="unit2">V</span></div></div>
+            <div class="metric"><div class="label">Load current</div><div class="value" id="mI">4.00 <span class="unit2">mA</span></div></div>
+            <div class="metric"><div class="label">Load power</div><div class="value" id="mP">16.00 <span class="unit2">mW</span></div></div>
+            <div class="metric"><div class="label">Power at maximum</div><div class="value" id="mPmax">24.00 <span class="unit2">mW</span></div></div>
+          </div>
+        </section>
+        <div class="twocol">
+          <section class="panel section"><div class="sectionhead"><div><h2>Equivalent source</h2><p>Seen looking into the output terminals.</p></div><span class="pill">SOURCE TRANSFORMS</span></div>
+            <div class="equivalent"><div class="eqbox"><div class="k">Thevenin voltage · Vth</div><div class="v" id="vth">8.00 <span>V</span></div></div><div class="eqbox"><div class="k">Thevenin resistance · Rth</div><div class="v" id="rth">666.7 <span>Ω</span></div></div><div class="eqbox"><div class="k">Norton current · In</div><div class="v" id="inorton">12.00 <span>mA</span></div></div><div class="eqbox"><div class="k">Maximum power load · RL = Rth</div><div class="v" id="rlmax">666.7 <span>Ω</span></div></div></div>
+            <div class="formula">Vth = Vs · R2/(R1+R2) &nbsp; | &nbsp; Rth = R1 ∥ R2 &nbsp; | &nbsp; In = Vth/Rth</div><div class="verify"><span class="check">✓</span><span id="kcl">KCL verified: incoming current = outgoing currents.</span></div>
+          </section>
+          <section class="panel section"><div class="sectionhead"><div><h2>Law checks & analysis</h2><p>Equations for the live circuit values.</p></div><span class="pill">KCL · KVL · MESH</span></div>
+            <div class="equations"><div class="eqline"><span class="tag">Node analysis · KCL</span><code id="nodeeq">(Vs − Vout)/R1 = Vout/R2 + Vout/RL</code></div><div class="eqline"><span class="tag">Mesh analysis · clockwise currents</span><code id="mesheq">(R1+R2)I₁ − R2I₂ = Vs<br>−R2I₁ + (R2+RL)I₂ = 0</code></div><div class="eqline"><span class="tag">Kirchhoff voltage law · loops</span><code id="kvleq">Vs − I₁R1 − (I₁−I₂)R2 = 0<br>(I₁−I₂)R2 − I₂RL = 0</code></div></div>
+            <p class="eqnote" id="resultnote">I₁ = current through R1; I₂ = current through RL. Shared branch current through R2 is I₁ − I₂.</p>
+          </section>
+        </div>
+        <section class="panel chartpanel"><div class="sectionhead"><div><h2>Maximum power transfer</h2><p>Load power reaches its peak when RL equals the Thevenin resistance.</p></div><span class="pill">PLOAD VS RL</span></div><div class="chartwrap"><canvas id="chart" aria-label="Graph of load power versus load resistance"></canvas></div><div class="chartfoot"><span class="legend"><span class="key"><i class="swatch"></i>Power in load</span><span class="key"><i class="swatch dot"></i>Current RL</span></span><span id="chartreadout">Maximum at RL = Rth</span></div></section>
+      </main>
+    </div>
+    <div class="footer"><strong>Model assumptions:</strong> ideal voltage source, positive resistors, steady-state DC. All resistance inputs are in ohms.</div>
+  </div>
+  <script>
+    const ids=['vs','r1','r2','rl']; const el=id=>document.getElementById(id);
+    const fmt=(n,d=2)=>Number.isFinite(n)?n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+    const si=(n,unit)=>{const a=Math.abs(n);if(a>=1e6)return `${fmt(n/1e6,2)} M${unit}`;if(a>=1e3)return `${fmt(n/1e3,2)} k${unit}`;if(a>=1)return `${fmt(n,2)} ${unit}`;if(a>=1e-3)return `${fmt(n*1e3,2)} m${unit}`;return `${fmt(n*1e6,2)} µ${unit}`};
+    const htmlval=(value,unit)=>`${value} <span>${unit}</span>`;
+    function draw(){
+      const [vs,r1,r2,rl]=ids.map(id=>Number(el(id).value));const err=el('error');
+      if([vs,r1,r2,rl].some(v=>!Number.isFinite(v)||v<=0)){err.style.display='block';err.textContent='Enter a positive number for the source voltage and each resistance.';return}
+      err.style.display='none';
+      const rth=r1*r2/(r1+r2),vth=vs*r2/(r1+r2),ino=vth/rth;
+      const vout=vth*rl/(rth+rl),i1=(vs-vout)/r1,i2=vout/rl,ir2=vout/r2,pload=vout*i2,pmax=vth*vth/(4*rth);
+      const residual=Math.abs(i1-i2-ir2);const tol=Math.max(Math.abs(i1)*1e-9,1e-12);
+      el('vth').innerHTML=htmlval(fmt(vth),'V');el('rth').innerHTML=htmlval(si(rth,'Ω'),'');el('inorton').innerHTML=htmlval(si(ino,'A'),'');el('rlmax').innerHTML=htmlval(si(rth,'Ω'),'');
+      el('mV').innerHTML=`${fmt(vout)} <span class="unit2">V</span>`;const currentScale=Math.abs(i2)>=1?1:Math.abs(i2)>=1e-3?1e3:1e6,currentUnit=Math.abs(i2)>=1?'A':Math.abs(i2)>=1e-3?'mA':'µA';el('mI').innerHTML=`${fmt(i2*currentScale)} <span class="unit2">${currentUnit}</span>`;
+      const pDisp=pload>=1?`${fmt(pload)} <span class="unit2">W</span>`:`${fmt(pload*1e3)} <span class="unit2">mW</span>`;el('mP').innerHTML=pDisp;
+      el('mPmax').innerHTML=pmax>=1?`${fmt(pmax)} <span class="unit2">W</span>`:`${fmt(pmax*1e3)} <span class="unit2">mW</span>`;
+      el('svgR1').textContent=si(r1,'Ω');el('svgR2').textContent=si(r2,'Ω');el('svgRL').textContent=si(rl,'Ω');el('svgVs').textContent=si(vs,'V');el('svgVout').textContent=`${fmt(vout)} V`;
+      el('svgI1').textContent=`I₁ ${si(i1,'A')} →`;el('svgI2').textContent=`IR2 ${si(ir2,'A')} ↓`;el('svgIL').textContent=`IL ${si(i2,'A')} ↓`;
+      el('kcl').textContent=`KCL ${residual<=tol?'verified':'check'}: ${si(i1,'A')} in = ${si(ir2,'A')} through R2 + ${si(i2,'A')} through RL.`;
+      el('nodeeq').innerHTML=`(${fmt(vs,3)} − Vout)/${si(r1,'Ω')} = Vout/${si(r2,'Ω')} + Vout/${si(rl,'Ω')} &nbsp; → &nbsp; Vout = ${fmt(vout)} V`;
+      el('mesheq').innerHTML=`(${si(r1,'Ω')}+${si(r2,'Ω')})I₁ − ${si(r2,'Ω')}I₂ = ${fmt(vs,3)} V<br>−${si(r2,'Ω')}I₁ + (${si(r2,'Ω')}+${si(rl,'Ω')})I₂ = 0<br>Solution: I₁ = ${si(i1,'A')}, I₂ = ${si(i2,'A')}`;
+      el('kvleq').innerHTML=`Loop 1: ${fmt(vs,3)} − I₁·${si(r1,'Ω')} − (I₁−I₂)·${si(r2,'Ω')} = 0<br>Loop 2: (I₁−I₂)·${si(r2,'Ω')} − I₂·${si(rl,'Ω')} = 0`;
+      el('chartreadout').textContent=`Current RL = ${si(rl,'Ω')} · ${fmt(pload*1e3)} mW`;
+      plot(rth,pmax,rl);
+    }
+    function plot(rth,pmax,rl){
+      const c=el('chart'),rect=c.getBoundingClientRect(),dpr=window.devicePixelRatio||1;c.width=Math.max(1,rect.width*dpr);c.height=Math.max(1,rect.height*dpr);const x=c.getContext('2d');x.scale(dpr,dpr);
+      const w=rect.width,h=rect.height,L=52,R=17,T=14,B=34,pw=w-L-R,ph=h-T-B;
+      x.clearRect(0,0,w,h);x.font='10px ui-sans-serif,system-ui';x.lineWidth=1;
+      const minX=Math.log10(rth)-1.45,maxX=Math.log10(rth)+1.45,maxY=pmax*1.12;
+      const X=r=>L+(Math.log10(r)-minX)/(maxX-minX)*pw,Y=p=>T+ph-(p/maxY)*ph;
+      x.strokeStyle='#dedbd2';x.fillStyle='#74766e';x.textAlign='right';x.textBaseline='middle';
+      for(let j=0;j<=4;j++){const p=maxY*j/4,y=Y(p);x.beginPath();x.moveTo(L,y);x.lineTo(w-R,y);x.stroke();x.fillText(`${fmt(p*1e3,0)} mW`,L-8,y)}
+      x.textAlign='center';x.textBaseline='top';for(let j=0;j<=4;j++){const r=10**(minX+(maxX-minX)*j/4),xx=L+pw*j/4;x.fillText(si(r,'Ω'),xx,T+ph+8)}
+      x.save();x.translate(12,T+ph/2);x.rotate(-Math.PI/2);x.textAlign='center';x.textBaseline='middle';x.fillText('Load power',0,0);x.restore();x.textAlign='center';x.fillText('Load resistance RL (log scale)',L+pw/2,h-13);
+      x.strokeStyle='#667653';x.lineWidth=2.5;x.beginPath();for(let k=0;k<=180;k++){const lx=minX+(maxX-minX)*k/180,r=10**lx,p=vthFrom(r,rth,pmax);const xx=L+pw*k/180,yy=Y(p);if(k===0)x.moveTo(xx,yy);else x.lineTo(xx,yy)}x.stroke();
+      const mx=X(rth),my=Y(pmax);x.setLineDash([4,4]);x.strokeStyle='#ad6844';x.lineWidth=1.2;x.beginPath();x.moveTo(mx,T);x.lineTo(mx,T+ph);x.stroke();x.setLineDash([]);x.fillStyle='#ad6844';x.beginPath();x.arc(mx,my,4,0,Math.PI*2);x.fill();
+      const cx=Math.min(w-R-4,Math.max(L+4,X(rl))),cy=Y(Math.min(maxY,loadPower(rl,rth,pmax)));x.fillStyle='#ad6844';x.beginPath();x.arc(cx,cy,4,0,Math.PI*2);x.fill();
+    }
+    function vthFrom(r,rth,pmax){return 4*pmax*r*rth/((r+rth)*(r+rth))}function loadPower(r,rth,pmax){return vthFrom(r,rth,pmax)}
+    ids.forEach(id=>el(id).addEventListener('input',draw));window.addEventListener('resize',draw);
+    el('reset').addEventListener('click',()=>{[12,1000,2000,1000].forEach((v,i)=>el(ids[i]).value=v);draw()});
+    el('maxload').addEventListener('click',()=>{const r1=Number(el('r1').value),r2=Number(el('r2').value);if(r1>0&&r2>0){el('rl').value=r1*r2/(r1+r2);draw()}});
+    draw();
+  </script>
+</body>
+</html>
